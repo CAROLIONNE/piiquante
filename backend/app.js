@@ -8,6 +8,8 @@ app.use(express.json());
 const saucesRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 
+const path = require('path');
+
 // CORS
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -32,6 +34,7 @@ mongoose
 
 
 // Routes
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use("/api/sauces", saucesRoutes);
 app.use("/api/auth", userRoutes);
 
