@@ -70,7 +70,6 @@ exports.likeSauce = (req, res, next) => {
   .then((sauce) => {
     let userLike = sauce.usersLiked.find((id) => id === userId);
     let userDislike = sauce.usersDisliked.find((id) => id === userId);
-    console.log(like)
     switch (like) {
       case 1: sauce.likes += 1;
         sauce.usersLiked.push(userId);
