@@ -1,15 +1,19 @@
+// Import express
 const express = require("express");
-
-const helmet = require("helmet");
-
 const app = express();
 
+// Import helmet
+const helmet = require("helmet");
+
 app.use(helmet());
+
+// Import mongoose
 const mongoose = require("mongoose");
 
+// Permet d'accéder au corps de la requête
 app.use(express.json());
 
-// import rate limit
+//  rate limit
 const rateLimit = require('express-rate-limit')
 
 const limiter = rateLimit({
@@ -19,7 +23,7 @@ const limiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
 
-// Apply the rate limiting middleware to all requests
+// Limite toutes les requetes
 app.use(limiter)
 
 // IMPORT dotenv pour creer les variables d'environnement
@@ -27,6 +31,7 @@ require('dotenv').config();
 const S3_BUCKET = process.env.S3_BUCKET;
 const SECRET_KEY = process.env.SECRET_KEY;
 
+// IMPORT routes
 const saucesRoutes = require("./routes/sauce");
 const userRoutes = require("./routes/user");
 
@@ -46,6 +51,12 @@ app.use((req, res, next) => {
   );
   next();
 });
+// headers pour autoriser les images
+app.use((req, res, next) => {
+  res.removeHeader('Cross-Origin-Resource-Policy')
+  res.removeHeader('Cross-Origin-Embedder-Policy')
+  next()
+})
 
 
 // MongoDB
