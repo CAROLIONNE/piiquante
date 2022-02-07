@@ -4,9 +4,13 @@ const fs = require("fs");
 
 // Création d'une nouvelle sauce
 exports.createSauce = (req, res, next) => {
+  // crée l'objet sauce 
   const sauceObject = JSON.parse(req.body.sauce);
+  // supprime l'id envoyé par le front-end
   delete sauceObject._id;
+  // instance du modele Sauce
   const sauce = new Sauce({
+    // copie les informations du corps de la requete
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
       req.file.filename
@@ -25,13 +29,17 @@ exports.createSauce = (req, res, next) => {
 // Modifier une sauce
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file
-    ? {
+  ? {
+      // si l'image est modifié créer l'objet js
       ...JSON.parse(req.body.sauce),
+      // chemin image 
       imageUrl: `${req.protocol}://${req.get("host")}/images/${
         req.file.filename
       }`,
     }
+    // Sinon recupérer le corps de la requête
     : { ...req.body };
+    // Mettre a jour la base de donnée
   Sauce.updateOne(
     { _id: req.params.id },
     { ...sauceObject, _id: req.params.id }
@@ -74,10 +82,10 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
-// Choix de la sauce
+// Trouver l'id de la sauce
   Sauce.findOne({ _id: req.params.id })
   .then((sauce) => {
-    // constante utilisateur qui a voté
+    // variable utilisateur qui a voté
     let userLike = sauce.usersLiked.find((id) => id === userId);
     let userDislike = sauce.usersDisliked.find((id) => id === userId);
     switch (like) {
