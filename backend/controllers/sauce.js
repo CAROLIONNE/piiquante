@@ -74,7 +74,7 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
-// choix de la sauce
+// Choix de la sauce
   Sauce.findOne({ _id: req.params.id })
   .then((sauce) => {
     // constante utilisateur qui a voté
@@ -85,7 +85,6 @@ exports.likeSauce = (req, res, next) => {
       case 1: sauce.likes += 1;
         sauce.usersLiked.push(userId);
         break;
-        
       case 0: 
       // Decrementer un like
       if (userLike) {
@@ -98,7 +97,7 @@ exports.likeSauce = (req, res, next) => {
         sauce.usersDisliked = sauce.usersDisliked.filter((id) => id !== userId)
       }
       break
-      // incrementer un dislike
+      // Incrementer un dislike
       case -1: sauce.dislikes += 1;
         sauce.usersDisliked.push(userId);
         break
