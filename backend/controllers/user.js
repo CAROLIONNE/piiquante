@@ -38,7 +38,7 @@ exports.signup = (req, res, next) => {
 // Connexion
 exports.login = (req, res, next) => {
   // Recherche utilisateur dans data base
-  User.findOne({ email: maskData.maskEmail2(req.body.email, maskData) })
+  User.findOne({ email: maskData.maskEmail2(req.body.email, emailMask2Options) })
     .then((user) => {
       if (!user) {
         return res.status(401).json({ error: "Utilisateur non trouvé !" });
