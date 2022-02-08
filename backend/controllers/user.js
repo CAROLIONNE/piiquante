@@ -11,9 +11,6 @@ const emailMask2Options = {
     maskAtTheRate: false
 };
 
-
-
-
 // Inscription
 exports.signup = (req, res, next) => {
   bcrypt

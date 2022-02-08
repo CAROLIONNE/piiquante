@@ -4,9 +4,13 @@ const fs = require("fs");
 
 // Création d'une nouvelle sauce
 exports.createSauce = (req, res, next) => {
+  // crée l'objet sauce 
   const sauceObject = JSON.parse(req.body.sauce);
+   // supprime l'id envoyé par le front-end
   delete sauceObject._id;
+   // instance du modele Sauce
   const sauce = new Sauce({
+    // copie les informations du corps de la requete
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
       req.file.filename
@@ -74,10 +78,10 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
   const like = req.body.like;
   const userId = req.body.userId;
-// choix de la sauce
+// Trouver l'id de la sauce
   Sauce.findOne({ _id: req.params.id })
   .then((sauce) => {
-    // constante utilisateur qui a voté
+    // Utilisateur qui a voté
     let userLike = sauce.usersLiked.find((id) => id === userId);
     let userDislike = sauce.usersDisliked.find((id) => id === userId);
     switch (like) {
@@ -98,7 +102,7 @@ exports.likeSauce = (req, res, next) => {
         sauce.usersDisliked = sauce.usersDisliked.filter((id) => id !== userId)
       }
       break
-      // incrementer un dislike
+      // Incrementer un dislike
       case -1: sauce.dislikes += 1;
         sauce.usersDisliked.push(userId);
         break
